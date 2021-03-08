@@ -17,9 +17,9 @@ from waymo_open_dataset.utils import  frame_utils
 from waymo_open_dataset import dataset_pb2 as open_dataset
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--out_folder', type=str, default='/mnt/truenas/scratch/ziqi.pang/datasets/waymo/track_validation_info/',
+parser.add_argument('--out_folder', type=str, default='../../../datasets/waymo/track_validation_info/',
     help='the location of output information')
-parser.add_argument('--data_folder', type=str, default='/mnt/truenas/scratch/ziqi.pang/datasets/waymo/sot/ts_info/',
+parser.add_argument('--data_folder', type=str, default='../../../datasets/waymo/sot/ts_info/',
     help='the location that stores the tfrecords')
 args = parser.parse_args()
 

@@ -7,7 +7,7 @@ import os, numpy as np, argparse, multiprocessing
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--data_folder', type=str, default='/mnt/truenas/scratch/ziqi.pang/datasets/waymo/sot',
+parser.add_argument('--data_folder', type=str, default='../../../datasets/waymo/sot',
     help='the location of data')
 parser.add_argument('--process', type=int, default=1)
 args = parser.parse_args()
@@ -80,9 +80,11 @@ def main(token, raw_pc_folder, clean_pc_folder, ground_pc_folder):
 
 
 if __name__ == '__main__':
-    pool = multiprocessing.Pool(args.process)
-    for token in range(args.process):
-        result = pool.apply_async(main, args=((token, args.process), args.raw_pc_folder, args.clean_pc_folder, args.ground_pc_folder))
-    pool.close()
-    pool.join()
-    # main((0, 1), args.raw_pc_folder, args.clean_pc_folder, args.ground_pc_folder)
+    if args.process > 1:
+        pool = multiprocessing.Pool(args.process)
+        for token in range(args.process):
+            result = pool.apply_async(main, args=((token, args.process), args.raw_pc_folder, args.clean_pc_folder, args.ground_pc_folder))
+        pool.close()
+        pool.join()
+    else:
+        main((0, 1), args.raw_pc_folder, args.clean_pc_folder, args.ground_pc_folder)

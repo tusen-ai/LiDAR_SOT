@@ -120,7 +120,8 @@ After this, you may access the result for tracklet `ID` at:
 For computing the accuracy and robustness of tracklets, use the following code:
 
 ```bash
-python evaluation/evaluation.py \
+cd evaluation
+python evaluation.py \
     --name NAME \                                 # the name of the experiment
     --result_folder result_folder \               # result folder
     --data_folder DATA_ROOT \                     # root directory storing the dataset
@@ -128,10 +129,11 @@ python evaluation/evaluation.py \
     --iou                                         # use this if already computes the iou during inference
 ```
 
-For the evaluation of shapes,  use the following code:
+For the evaluation of shapes, use the following code:
 
 ```bash
-python evaluation/evaluation.py \
+cd evaluation
+python evaluation.py \
     --name NAME \                                 # the name of the experiment
     --result_folder result_folder \               # result folder
     --data_folder DATA_ROOT \                     # root directory storing the dataset
@@ -140,6 +142,8 @@ python evaluation/evaluation.py \
 ```
 
 ## 5 Environment
+
+This repository has been tested and run using `python=3.6`.
 
 For inference on the dataset using our tracker, the following libraries are compulsory:
 ```

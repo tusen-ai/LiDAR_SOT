@@ -1,5 +1,18 @@
 # Description of `configs.yaml`
 
+## Example Configuration Files:
+
+We provide some example configuration files in `../configs/`. They are for the different settings in the paper, including:
+
+| Configuration Name | Experiment Setting                                           |
+| ------------------ | ------------------------------------------------------------ |
+| `icp.yaml`         | ICP + Motion Prior                                           |
+| `icp_s1.yaml`      | ICP + Motion Prior + Shape Term (First Frame as Shape)       |
+| `icp_sall.yaml`    | ICP + Motion Prior + Shape Term (Aggregated Shape)           |
+| `icp_sall_m.yaml`  | ICP + Motion Prior + Shape Term (Aggregated Shape) + Motion Consistency |
+
+## Description on Reading / Writing Configuration Files
+
 The fields and the description of `configs.yaml` are as follows. Please look at the corresponding components to see how we may initialize the whole tracker using the configurations.
 
 ```yaml
@@ -36,7 +49,7 @@ motion_model:                # motion model related configurations
   moving_avg_weight: 0.5     # moving average weight
     
 shape_map:                   # configurations for maintaining a shape during tracking
-  update_freq: 1000          # how many frames for an update
+  update_freq: 1000          # how many frames for an update, this 1000 means no update at all on waymo
   subshape_len: 2            # subshape length
   box_scaling_pc_bank: 1.0   # the scale for segmenting the related LiDAR points
   downsample: true           # if downsample the shape
@@ -44,7 +57,12 @@ shape_map:                   # configurations for maintaining a shape during tra
 
 factors:                     # loss factors
   switch:                    # the switch for some factors, might save time
-    latitude: false          # whether to use the latitude factor
+    motion_prior: true       # whether to use the motion_prior term
+    icp_loss: true
+    shape_loss: true
+    motion_consistency: true
+    latitude: false
+    detection: false         
   names:                     # factor names
     - latitude
     - icp_loss
@@ -81,6 +99,7 @@ factors:                     # loss factors
   motion_consistency: ~      # motion model loss configurations
 
 weight:                      # loss weights
+  icp: 1.0
   latitude: 1.0
   motion_prior: 0.1
   motion_smooth: 0.0

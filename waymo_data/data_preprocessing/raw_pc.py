@@ -22,9 +22,9 @@ from waymo_open_dataset import dataset_pb2 as open_dataset
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--data_folder', type=str, default='/mnt/truenas/scratch/ziqi.pang/datasets/waymo/validation/',
+parser.add_argument('--data_folder', type=str, default='../../../datasets/waymo/validation/',
     help='the location of tfrecords')
-parser.add_argument('--output_folder', type=str, default='/mnt/truenas/scratch/ziqi.pang/datasets/waymo/sot/',
+parser.add_argument('--output_folder', type=str, default='../../../datasets/waymo/sot/',
     help='the location of raw pcs')
 parser.add_argument('--process', type=int, default=1)
 args = parser.parse_args()

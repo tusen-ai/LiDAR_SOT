@@ -4,7 +4,7 @@ import numpy as np, os, argparse, numba, multiprocessing
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--data_folder', type=str, default='/mnt/truenas/scratch/ziqi.pang/datasets/waymo/sot',
+parser.add_argument('--data_folder', type=str, default='../../../datasets/waymo/sot',
     help='the location of data')
 parser.add_argument('--process', type=int, default=1, help='multiprocessing for acceleration')
 args = parser.parse_args()

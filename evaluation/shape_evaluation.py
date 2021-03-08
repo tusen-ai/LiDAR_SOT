@@ -6,9 +6,9 @@ from sot_3d.visualization import o3d_pc_visualization
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--name', default='debug', type=str, help='name of the experiment')
-parser.add_argument('--result_folder', type=str, default='/mnt/truenas/scratch/ziqi.pang/TrackingResults/',
+parser.add_argument('--result_folder', type=str, default='../TrackingResults/',
     help='path to store the tracking results')
-parser.add_argument('--data_folder', type=str, default='/mnt/truenas/scratch/ziqi.pang/datasets/waymo/sot/',
+parser.add_argument('--data_folder', type=str, default='../datasets/waymo/sot/',
     help='store the data')
 parser.add_argument('--bench_list_folder', type=str, default='./benchmark', 
     help='the path of benchmark object list')

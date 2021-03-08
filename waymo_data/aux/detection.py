@@ -10,9 +10,9 @@ from waymo_open_dataset.protos import metrics_pb2
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--name', type=str, default='public')
-parser.add_argument('--det_folder', type=str, default='/mnt/truenas/scratch/ziqi.pang/datasets/waymo/sot/detection/')
+parser.add_argument('--det_folder', type=str, default='../../../datasets/waymo/sot/detection/')
 parser.add_argument('--file_name', type=str, default='val.bin')
-parser.add_argument('--data_folder', type=str, default='/mnt/truenas/scratch/ziqi.pang/datasets/waymo/sot/')
+parser.add_argument('--data_folder', type=str, default='../../../datasets/waymo/sot/')
 args = parser.parse_args()
 
 args.output_folder = os.path.join(args.det_folder, args.name, 'dets')

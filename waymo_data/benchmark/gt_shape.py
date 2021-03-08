@@ -7,7 +7,7 @@ from sot_3d.data_protos import BBox
 parser = argparse.ArgumentParser()
 parser.add_argument('--bench_list', type=str, default='../../benchmark/vehicle/bench_list.json', 
     help='the path of benchmark object list')
-parser.add_argument('--data_folder', type=str, default='/mnt/truenas/scratch/ziqi.pang/datasets/waymo/sot/')
+parser.add_argument('--data_folder', type=str, default='../../../datasets/waymo/sot/')
 parser.add_argument('--process', type=int, default=1)
 args = parser.parse_args()
 
@@ -72,9 +72,11 @@ def main(bench_list_path, data_folder, token=0, process=1):
 
 
 if __name__ == '__main__':
-    pool = multiprocessing.Pool(args.process)
-    for token in range(args.process):
-        result = pool.apply_async(main, args=(args.bench_list, args.data_folder, token, args.process))
-    pool.close()
-    pool.join()
-    # main(args.bench_list, args.data_folder, 0, 1)
+    if args.process > 1:
+        pool = multiprocessing.Pool(args.process)
+        for token in range(args.process):
+            result = pool.apply_async(main, args=(args.bench_list, args.data_folder, token, args.process))
+        pool.close()
+        pool.join()
+    else:
+        main(args.bench_list, args.data_folder, 0, 1)

@@ -10,7 +10,7 @@ parser = argparse.ArgumentParser()
 # paths
 parser.add_argument('--bench_list', type=str, default='./benchmark/vehicle/bench_list.json', 
     help='the path of benchmark object list')
-parser.add_argument('--data_folder', type=str, default='/mnt/truenas/scratch/ziqi.pang/datasets/waymo/sot/',
+parser.add_argument('--data_folder', type=str, default='../datasets/waymo/sot/',
     help='store the data')
 parser.add_argument('--result_folder', type=str, default='../TrackingResults/',
     help='path to store the tracking results')
@@ -190,10 +190,6 @@ def main(name, config_path, bench_list, data_folder, result_folder, token=0, pro
     for tracklet_index, tracklet_info in enumerate(final_bench_list):
         if tracklet_index % process != token:
             continue
-        # if tracklet_info['id'] != '-KpKb_7UDmsdQCf8FS3g9w':
-        #     continue
-        # if tracklet_info['id'] != 'VQx79dcoV5b_3z1XQQSEhQ':
-        #     continue
         print('START ID {:}, {:} / {:}'.format(tracklet_info['id'], tracklet_index + 1, len(final_bench_list)))
         
         frame_range = tracklet_info['frame_range']

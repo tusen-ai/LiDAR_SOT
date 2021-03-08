@@ -23,9 +23,9 @@ from waymo_open_dataset import dataset_pb2 as open_dataset
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--data_folder', type=str, default='/mnt/truenas/scratch/ziqi.pang/datasets/waymo/validation/',
+parser.add_argument('--data_folder', type=str, default='../../../datasets/waymo/validation/',
     help='location of tfrecords')
-parser.add_argument('--output_folder', type=str, default='/mnt/truenas/scratch/ziqi.pang/datasets/waymo/sot/ego_info/',
+parser.add_argument('--output_folder', type=str, default='../../../datasets/waymo/sot/ego_info/',
     help='output folder')
 parser.add_argument('--process', type=int, default=1, help='use multiprocessing for acceleration')
 args = parser.parse_args()
@@ -90,9 +90,11 @@ def main(token, process_num, data_folder, output_folder):
 
 
 if __name__ == '__main__':
-    pool = multiprocessing.Pool(args.process)
-    for token in range(args.process):
-        result = pool.apply_async(main, args=(token, args.process, args.data_folder, args.output_folder))
-    pool.close()
-    pool.join()
-    # main(args.data_folder, args.output_folder)
+    if args.process > 1:
+        pool = multiprocessing.Pool(args.process)
+        for token in range(args.process):
+            result = pool.apply_async(main, args=(token, args.process, args.data_folder, args.output_folder))
+        pool.close()
+        pool.join()
+    else:
+        main(args.data_folder, args.output_folder)
