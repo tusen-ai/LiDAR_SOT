@@ -1,0 +1,92 @@
+running:
+  window_size: 2
+
+data_loader:
+  terrain: false
+  detection: false
+  obj_type: 1
+
+finder:
+  optim:
+    method: BFGS
+    ITER: 50
+    options:
+      maxiter: 50
+      disp: false
+  neighbor_num: 1
+  box_scaling_prev: 1.0
+  box_scaling_next: 3.0
+  agg_subshape: false
+  least_pc: 10
+  pc_limit: 1000
+  loss_type: L2
+  ransac: 
+    switch: false
+
+optim:
+  method: BFGS
+  iter: 20
+  options:
+    maxiter: 50
+    disp: false
+
+motion_model:
+  moving_avg_weight: 0.5
+
+shape_map:
+  update_freq: 1000
+  subshape_len: 2
+  box_scaling_pc_bank: 1.0
+  downsample: true
+  resolution: 0.05
+
+factors:
+  switch:
+    motion_prior: true
+    icp_loss: true
+    shape_loss: false
+    motion_consistency: false
+    latitude: false
+    detection: false
+  names:
+    - latitude
+    - icp_loss
+    - shape_loss
+    - motion_prior
+    - motion_consistency
+    - detection
+  latitude:
+    scaling: 1.0
+  icp_loss:
+    neighbor_num: 1
+    least_pc: 10
+    pc_limit: 1000
+    box_scaling_prev: 1.1
+    box_scaling_next: 1.5
+    agg_subshape: true
+    loss_type: L2
+  shape_loss:
+    neighbor_num: 1
+    least_pc: 10
+    pc_limit: 1000
+    box_scaling_next: 1.5
+    loss_type: L2
+    ransac:
+      switch: true
+      num_iter: 200
+      threshold: 0.2
+      ransac_limit: 10 
+  motion_prior: ~
+  motion_consistency: ~
+  detection:
+    score_threshold: 0.5
+    iou_threshold: 0.1
+
+weight:
+  icp: 1.0
+  latitude: 0.0
+  motion_prior: 0.1
+  motion_smooth: 0.0
+  shape_loss: 0.0
+  motion_consistency: 0.0
+  detection: 0.0
