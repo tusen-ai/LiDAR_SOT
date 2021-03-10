@@ -34,10 +34,14 @@ from waymo_open_dataset import dataset_pb2 as open_dataset
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--data_folder', type=str, default='../../../datasets/waymo/validation/')
-parser.add_argument('--clean_pc_folder', type=str, default='../../../datasets/waymo/sot/pc/clean_pc/')
-parser.add_argument('--output_folder', type=str, default='../../../datasets/waymo/sot/gt_info/')
+parser.add_argument('--output_folder', type=str, default='../../../datasets/waymo/sot/')
 parser.add_argument('--process', type=int, default=1)
 args = parser.parse_args()
+
+args.clean_pc_folder = os.path.join(args.data_folder, 'pc', 'clean_pc')
+args.output_folder = os.path.join(args.output_folder, 'gt_info')
+if not os.path.join(args.output_folder):
+    os.makedirs(args.output_folder)
 
 
 def pb2dict(obj):
@@ -89,7 +93,7 @@ def main(data_folder, output_folder, pc_folder, token=0, process_num=1):
     for record_index, tf_record_name in enumerate(tf_records[:]):
         if record_index % process_num != token:
             continue
-        print('starting ', record_index + 1, ' / ', len(tf_records), ' ', tf_record_name)
+        print('starting for gt info ', record_index + 1, ' / ', len(tf_records), ' ', tf_record_name)
         FILE_NAME = os.path.join(data_folder, tf_record_name)
         dataset = tf.data.TFRecordDataset(FILE_NAME, compression_type='')
         segment_name = tf_record_name.split('.')[0]
@@ -147,8 +151,11 @@ def main(data_folder, output_folder, pc_folder, token=0, process_num=1):
 
 
 if __name__ == '__main__':
-    pool = multiprocessing.Pool(args.process)
-    for token in range(args.process):
-        result = pool.apply_async(main, args=(args.data_folder, args.output_folder, args.clean_pc_folder, token, args.process))
-    pool.close()
-    pool.join()
+    if args.process > 1:
+        pool = multiprocessing.Pool(args.process)
+        for token in range(args.process):
+            result = pool.apply_async(main, args=(args.data_folder, args.output_folder, args.clean_pc_folder, token, args.process))
+        pool.close()
+        pool.join()
+    else:
+        main(args.data_folder, args.output_folder, args.clean_pc_folder, 0, 1)

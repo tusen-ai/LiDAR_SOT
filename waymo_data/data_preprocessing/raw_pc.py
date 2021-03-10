@@ -29,6 +29,8 @@ parser.add_argument('--output_folder', type=str, default='../../../datasets/waym
 parser.add_argument('--process', type=int, default=1)
 args = parser.parse_args()
 args.output_folder = os.path.join(args.output_folder, 'pc', 'raw_pc')
+if not os.path.exists(args.output_folder):
+    os.makedirs(args.output_folder)
 
 
 def pb2dict(obj):
@@ -63,13 +65,13 @@ def main(data_folder, output_folder, multi_process_token=(0, 1)):
     for record_index, tf_record_name in enumerate(tf_records):
         if record_index % multi_process_token[1] != multi_process_token[0]:
             continue
-        print('starting ', record_index + 1, ' / ', len(tf_records), ' ', tf_record_name)
+        print('starting for raw pc', record_index + 1, ' / ', len(tf_records), ' ', tf_record_name)
         FILE_NAME = os.path.join(data_folder, tf_record_name)
         dataset = tf.data.TFRecordDataset(FILE_NAME, compression_type='')
         segment_name = tf_record_name.split('.')[0]
 
-        if os.path.exists(os.path.join(output_folder, '{}.npz'.format(segment_name))):
-            continue
+        # if os.path.exists(os.path.join(output_folder, '{}.npz'.format(segment_name))):
+        #     continue
 
         frame_num = 0
         pcs = dict()

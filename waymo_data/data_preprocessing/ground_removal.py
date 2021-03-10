@@ -14,6 +14,10 @@ args = parser.parse_args()
 args.raw_pc_folder = os.path.join(args.data_folder, 'pc', 'raw_pc')
 args.clean_pc_folder = os.path.join(args.data_folder, 'pc', 'clean_pc')
 args.ground_pc_folder = os.path.join(args.data_folder, 'pc', 'ground_pc')
+if not os.path.exists(args.clean_pc_folder):
+    os.makedirs(args.clean_pc_folder)
+if not os.path.exists(args.ground_pc_folder):
+    os.makedirs(args.ground_pc_folder)  
 
 
 def str2int(strs):
@@ -73,7 +77,7 @@ def main(token, raw_pc_folder, clean_pc_folder, ground_pc_folder):
             ground_pcs[str(frame_key)] = ground_frame_pc
 
             if (frame_index + 1) % 10 == 0:
-                print('SEQ {} / {}, Frame {} / {}'.format(file_index + 1, len(file_names), frame_index + 1, len(keys)))
+                print('Ground Removal SEQ {} / {}, Frame {} / {}'.format(file_index + 1, len(file_names), frame_index + 1, len(keys)))
         
         np.savez_compressed(os.path.join(clean_pc_folder, file_name), **clean_pcs)
         np.savez_compressed(os.path.join(ground_pc_folder, file_name), **ground_pcs)
