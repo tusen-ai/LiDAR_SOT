@@ -105,8 +105,8 @@ def frame_result_visualization(frame_result, pc):
     bbox0, bbox1 = frame_result['bbox0'], frame_result['bbox1']
     gt_bbox0, gt_bbox1 = frame_result['gt_bbox0'], frame_result['gt_bbox1']
     bbox1, gt_bbox1 = BBox.array2bbox(bbox1), BBox.array2bbox(gt_bbox1)
-    visualizer.handler_box(bbox1, color='bbox1')
-    visualizer.handler_box(gt_bbox1, color='bbox0')
+    visualizer.handler_box(bbox1, color='light_blue')
+    visualizer.handler_box(gt_bbox1, color='red')
     vis_pc = utils.pc_in_box_2D(gt_bbox1, pc, 4.0)
     visualizer.handler_pc(vis_pc)
     visualizer.show()

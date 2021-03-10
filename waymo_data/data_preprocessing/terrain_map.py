@@ -1,4 +1,5 @@
 """ Overlay the ground point cloud on each frame together as a pseudo terrain map
+    The output is an npz file {'terrain': terrain point clouds}
 """
 import numpy as np, os, argparse, numba, multiprocessing
 
@@ -8,8 +9,11 @@ parser.add_argument('--data_folder', type=str, default='../../../datasets/waymo/
     help='the location of data')
 parser.add_argument('--process', type=int, default=1, help='multiprocessing for acceleration')
 args = parser.parse_args()
+
 args.ground_pc_folder = os.path.join(args.data_folder, 'pc', 'ground_pc')
 args.terrain_map_folder = os.path.join(args.data_folder, 'pc', 'terrain_pc')
+if not os.path.exists(args.terrain_map_folder):
+    os.makedirs(args.terrain_map_folder)
 args.ego_info_folder = os.path.join(args.data_folder, 'ego_info')
 
 
@@ -43,7 +47,7 @@ def main(ego_info_folder, ground_pc_folder, terrain_map_folder, token=0, process
     for file_index, file_name in enumerate(file_names):
         if file_index % process != token:
             continue
-        print('START SEQ {:} / {:}'.format(file_index + 1, len(file_names)))
+        print('START SEQ for TERRAIN {:} / {:}'.format(file_index + 1, len(file_names)))
         ground_pc_data = np.load(os.path.join(ground_pc_folder, file_name), allow_pickle=True)
         ego_info_data = np.load(os.path.join(ego_info_folder, file_name), allow_pickle=True)
         frame_keys = list(ground_pc_data.keys())
@@ -62,8 +66,11 @@ def main(ego_info_folder, ground_pc_folder, terrain_map_folder, token=0, process
 
 
 if __name__ == '__main__':
-    pool = multiprocessing.Pool(args.process)
-    for token in range(args.process):
-        result = pool.apply_async(main, args=(args.ego_info_folder, args.ground_pc_folder, args.terrain_map_folder, token, args.process))
-    pool.close()
-    pool.join()
+    if args.process > 1:
+        pool = multiprocessing.Pool(args.process)
+        for token in range(args.process):
+            result = pool.apply_async(main, args=(args.ego_info_folder, args.ground_pc_folder, args.terrain_map_folder, token, args.process))
+        pool.close()
+        pool.join()
+    else:
+        main(args.ego_info_folder, args.ground_pc_folder, args.terrain_map_folder, 0, 1)

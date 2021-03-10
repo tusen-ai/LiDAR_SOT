@@ -1,8 +1,3 @@
-# Toolkits
+# Designs (Coming Soon)
 
-## 3D Bounding Box Computation
-
-To conveniently support the 
-
-## Visualization
-
+This documentation describes the designs of this project and highlights the steps to build up your own optimization-based tracking algorithms.

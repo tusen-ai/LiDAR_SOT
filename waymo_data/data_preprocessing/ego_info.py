@@ -25,7 +25,7 @@ from waymo_open_dataset import dataset_pb2 as open_dataset
 parser = argparse.ArgumentParser()
 parser.add_argument('--data_folder', type=str, default='../../../datasets/waymo/validation/',
     help='location of tfrecords')
-parser.add_argument('--output_folder', type=str, default='../../../datasets/waymo/sot/ego_info/',
+parser.add_argument('--output_folder', type=str, default='../../../datasets/waymo/sot/',
     help='output folder')
 parser.add_argument('--process', type=int, default=1, help='use multiprocessing for acceleration')
 args = parser.parse_args()
@@ -63,7 +63,7 @@ def main(token, process_num, data_folder, output_folder):
     for record_index, tf_record_name in enumerate(tf_records):
         if record_index % process_num != token:
             continue
-        print('starting ', record_index + 1, ' / ', len(tf_records), ' ', tf_record_name)
+        print('starting for ego info ', record_index + 1, ' / ', len(tf_records), ' ', tf_record_name)
         FILE_NAME = os.path.join(data_folder, tf_record_name)
         dataset = tf.data.TFRecordDataset(FILE_NAME, compression_type='')
         segment_name = tf_record_name.split('.')[0]
@@ -90,6 +90,10 @@ def main(token, process_num, data_folder, output_folder):
 
 
 if __name__ == '__main__':
+    args.output_folder = os.path.join(args.output_folder, 'ego_info')
+    if not os.path.exists(args.output_folder):
+        os.makedirs(args.output_folder)
+
     if args.process > 1:
         pool = multiprocessing.Pool(args.process)
         for token in range(args.process):

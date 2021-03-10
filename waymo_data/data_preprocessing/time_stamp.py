@@ -17,9 +17,9 @@ from waymo_open_dataset.utils import  frame_utils
 from waymo_open_dataset import dataset_pb2 as open_dataset
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--out_folder', type=str, default='../../../datasets/waymo/track_validation_info/',
+parser.add_argument('--output_folder', type=str, default='../../../datasets/waymo/sot/',
     help='the location of output information')
-parser.add_argument('--data_folder', type=str, default='../../../datasets/waymo/sot/ts_info/',
+parser.add_argument('--data_folder', type=str, default='../../../datasets/waymo/validation/',
     help='the location that stores the tfrecords')
 args = parser.parse_args()
 
@@ -30,7 +30,7 @@ def main(data_folder, out_folder):
     tf_records = sorted(tf_records)
 
     for record_index, tf_record_name in enumerate(tf_records):
-        print('starting ', record_index + 1, ' / ', len(tf_records), ' ', tf_record_name)
+        print('starting for time stamp: ', record_index + 1, ' / ', len(tf_records), ' ', tf_record_name)
         FILE_NAME = os.path.join(data_folder, tf_record_name)
         dataset = tf.data.TFRecordDataset(FILE_NAME, compression_type='')
 
@@ -43,10 +43,13 @@ def main(data_folder, out_folder):
         
         file_name = tf_record_name.split('.')[0]
         print(file_name)
-        f = open(os.path.join(out_folder, 'timestamp', '{}.json'.format(file_name)), 'w')
+        f = open(os.path.join(out_folder, '{}.json'.format(file_name)), 'w')
         json.dump(time_stamps, f)
         f.close()
 
 
 if __name__ == '__main__':
-    main(args.data_folder, args.out_folder)
+    args.output_folder = os.path.join(args.output_folder, 'ts_info')
+    if not os.path.exists(args.output_folder):
+        os.makedirs(args.output_folder)
+    main(args.data_folder, args.output_folder)

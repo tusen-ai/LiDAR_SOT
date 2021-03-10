@@ -1,6 +1,11 @@
-python time_stamp.py        # the time stamp of each frame
-python ego_info.py          # the ego information (a 4-by-4 matrix) of each frame
-python raw_pc.py            # the point cloud on each frame
-python ground_removal.py    # remove the ground
-python gt_info.py           # extract the gt bboxes information
-python terrain_map.py       # overlay the point cloud into a terrain map according to ego information
+tf_dir=$1
+root_dir=$2
+proc_num=$3
+proc_num=$(($proc_num))
+
+python time_stamp.py --data_folder tf_dir --output_folder root_dir 
+python ego_info.py --data_folder tf_dir --output_folder root_dir --process proc_num
+python raw_pc.py --data_folder tf_dir --output_folder root_dir --process proc_num
+python ground_removal.py --data_folder root_dir --process proc_num
+python gt_info.py --data_folder tf_dir --output_folder root_dir --process proc_num
+python terrain_map.py --data_folder root_dir --process proc_num

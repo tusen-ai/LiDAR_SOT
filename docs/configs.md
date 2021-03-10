@@ -1,6 +1,6 @@
 # Description of `configs.yaml`
 
-## Example Configuration Files:
+## 1. Example Configuration Files:
 
 We provide some example configuration files in `../configs/`. They are for the different settings in the paper, including:
 
@@ -11,7 +11,7 @@ We provide some example configuration files in `../configs/`. They are for the d
 | `icp_sall.yaml`    | ICP + Motion Prior + Shape Term (Aggregated Shape)           |
 | `icp_sall_m.yaml`  | ICP + Motion Prior + Shape Term (Aggregated Shape) + Motion Consistency |
 
-## Description on Reading / Writing Configuration Files
+## 2. Description on Reading / Writing Configuration Files
 
 The fields and the description of `configs.yaml` are as follows. Please look at the corresponding components to see how we may initialize the whole tracker using the configurations.
 
