@@ -1,10 +1,10 @@
 # Model-free Vehicle Tracking and State Estimation in Point Cloud Sequences
 
-## 1 Introduction
+## 1. Introduction
 
 This project concerns the single object tracking (SOT) of objects in point cloud sequences. The input to the algorithm are the starting location (in the form of a 3D bounding box) of an object and point cloud sequences. Our tracker then provides the bounding box on each subsequent point cloud frame, and get the dense shapes by aggregating the point clouds along with tracking. Furthermore, we explore its usages on other applications, such as simulating LiDAR scans for data augmentation.
 
-**Please check our youtube video below for a 1-minute introduction, and [this link](https://www.bilibili.com/video/BV1SX4y1V7nw/) to the bilibili version.**
+**Please check our [youtube video](https://www.youtube.com/watch?v=BpHixKs91i8) below for a 1-minute introduction, and [this link](https://www.bilibili.com/video/BV1SX4y1V7nw/) to the bilibili version.**
 [![Youtube Video for Our Project](imgs/video_cover.png)](https://www.youtube.com/watch?v=BpHixKs91i8)
 
 This `README` file describes the most basic usages of this code base. For more details, please refer to:
@@ -15,9 +15,19 @@ This `README` file describes the most basic usages of this code base. For more d
 * [Model Configs](./docs/configs.md): We use the `config.yaml` to specify the behaviour of the tracker. Please refer to this documentation for detailed explanation. 
 * [Toolkit](./docs/toolkit.md): Along this with project, we also provide several code snippets for visualizing the tracking results. This file discusses these toolkits we have created.
 
-## 2 SOT API and Inference
+## 2. SOT API and Inference
 
-### 2.1 Tracking API
+### 2.1 Installation
+
+Our code has been thoroughly tested using the environment of `python=3.6`. For more detailed dependencies, please refer to the `Environment` section below. 
+
+We wrap the usages of our code into a library `sot_3d`, and the users may install it via the following command. The advantage of this installation command is that the behaviors of `sot_3d` will keep synchronized with your modifications.
+
+```
+pip install -e ./
+```
+
+### 2.2 Tracking API
 
 The main API `tracker_api` of is in `main.py`. In the default case, it takes the model configuration, the beginning bounding box, and a data loader as input, output the tracking result as specified below. Some additional guidelines on this API are:
 
@@ -49,7 +59,7 @@ def tracker_api(configs, id, start_bbox, start_frame, data_loader, track_len, gt
 """
 ```
 
-### 2.2 Evaluation API
+### 2.3 Evaluation API
 
 The API for evaluation is in `evaluation/evaluation.py`. `tracklet_acc` and `tracklet_rob` compute the accuracy and robustness given the ious in a tracklet, and `metrics_from_bboxes` deals with the cases when the inputs are raw bounding boxes. Note that the bounding boxes are in the format of `sot_3d.data_protos.BBox`.
 
@@ -81,7 +91,7 @@ Our `LiDAR-SOT` benchmark selects 1172 tracklets from the validation set of Waym
 
 The information of selected tracklets is in the `./benchmark/`. Each `json` file stores the ids, segment names, and the frame intervals for each selected tracklet. For replicating the construction of this benchmark, please refer to [this documentation](./docs/benchmark.md). 
 
-## 4 Steps for Inference/Evaluation on the Benchmark
+## 4. Steps for Inference/Evaluation on the Benchmark
 
 ### 4.1 Data Preparation
 
@@ -100,7 +110,7 @@ python main.py \
     --process process_number \            # Use mutiple processes to split the dataset and accelerate inference.
 ```
 
-After this, you may access the result for tracklet `ID` at:
+After this, you may access the result for tracklet `ID` as demonstrated below. Inside the json files, `bbox0` and `bbox1` indicates the estimated bounding boxes in frame `frame_index - 1` and `frame_index`.
 
 ``` 
 -- result_folder
@@ -142,7 +152,7 @@ python evaluation.py \
     --process process_number                      # Use mutiple processes to split the dataset and accelerate evaluation.
 ```
 
-## 5 Environment
+## 5. Environment
 
 This repository has been tested and run using `python=3.6`.
 
