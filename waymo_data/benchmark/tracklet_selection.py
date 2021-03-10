@@ -11,11 +11,13 @@ from utils import *
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--gt_info_folder', type=str, default='../../../datasets/waymo/sot/gt_info/')
-parser.add_argument('--ego_info_folder', type=str, default='../../../datasets/waymo/sot/ego_info/')
+parser.add_argument('--data_folder', type=str, default='../../../datasets/waymo/sot')
 parser.add_argument('--bench_info_folder', type=str, default='../../benchmark/')
 parser.add_argument('--obj_type', type=str, default='vehicle')
 args = parser.parse_args()
+
+args.gt_info_folder = os.path.join(args.data_folder, 'gt_info')
+args.ego_info_folder = os.path.join(args.data_folder, 'ego_info')
 
 
 type_dict = {
