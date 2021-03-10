@@ -2,9 +2,10 @@
 
 ## 1 Introduction
 
-This project concerns the tracking and state estimation of objects in point cloud sequences. The input to the algorithm are the starting location (in the form of a 3D bounding box) of an object and point cloud sequences. Out tracker then provides the bounding box on each subsequence point cloud frame, as visualized in the figure below (the tracking results are visualized at an interval of 20 frames).
+This project concerns the tracking and state estimation of objects in point cloud sequences. The input to the algorithm are the starting location (in the form of a 3D bounding box) of an object and point cloud sequences. Our tracker then provides the bounding box on each subsequent point cloud frame, and get the dense shapes by aggregating the point clouds along with tracking. Furthermore, we explore its usages on other applications, such as simulating LiDAR scans for data augmentation.
 
-![Visualization of tracking (at an interval of 20 frames)](./imgs/tracking_visualization.png)
+**Check the youtube video below for a 1-minute introduction, and [this link](https://www.bilibili.com/video/BV1SX4y1V7nw/) to the bilibili version.**
+[![Youtube Video for Our Project](imgs/video_cover.png)](https://youtu.be/M3S3NJ5n5JQ)
 
 This `README` file describes the most basic usages of this code base. For more details, please refer to:
 
