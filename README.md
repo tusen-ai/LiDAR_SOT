@@ -2,7 +2,7 @@
 
 ## 1. Introduction
 
-This project concerns the single object tracking (SOT) of objects in point cloud sequences. The input to the algorithm are the starting location (in the form of a 3D bounding box) of an object and point cloud sequences. Our tracker then provides the bounding box on each subsequent point cloud frame, and get the dense shapes by aggregating the point clouds along with tracking. Furthermore, we explore its usages on other applications, such as simulating LiDAR scans for data augmentation.
+This project is the repository for paper [Model-free Vehicle Tracking and State Estimation in Point Cloud Sequences](https://arxiv.org/abs/2103.06028). It concerns the single object tracking (SOT) of objects in point cloud sequences. The input to the algorithm are the starting location (in the form of a 3D bounding box) of an object and point cloud sequences. Our tracker then provides the bounding box on each subsequent point cloud frame, and get the dense shapes by aggregating the point clouds along with tracking. Furthermore, we explore its usages on other applications, such as simulating LiDAR scans for data augmentation.
 
 **Please check our [youtube video](https://www.youtube.com/watch?v=BpHixKs91i8) below for a 1-minute introduction, and [this link](https://www.bilibili.com/video/BV1SX4y1V7nw/) to the bilibili version.**
 [![Youtube Video for Our Project](imgs/video_cover.png)](https://www.youtube.com/watch?v=BpHixKs91i8)
@@ -174,4 +174,17 @@ waymo_open_dataset
 Our visualization toolkit needs.
 ```
 matplotlib, open3d, pangolin
+```
+
+## 6. Citation
+
+If you find our paper or repository useful, please consider citing
+
+```tex
+@article{pang2021model,
+    title={Model-free Vehicle Tracking and State Estimation in Point Cloud Sequences},
+    author={Pang, Ziqi and Li, Zhichao and Wang, Naiyan},
+    journal={arXiv preprint arXiv:2103.06028},
+    year={2021}
+}
 ```
