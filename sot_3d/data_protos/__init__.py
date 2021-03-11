@@ -1,0 +1,1 @@
+from sot_3d.data_protos.bbox import BBox
