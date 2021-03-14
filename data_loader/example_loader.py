@@ -26,7 +26,9 @@ class ExampleLoader:
             allow_pickle=True)
         
         self.use_detection = self.configs['data_loader']['detection']
+        self.use_terrain = self.configs['data_loader']['terrain']
         self.obj_type = self.configs['data_loader']['obj_type']
+        if self.use_terrain:
             self.terrain = np.load(os.path.join(data_folder, 'pc', 'terrain_pc', '{:}.npz'.format(segment_name)),
                 allow_pickle=True)['terrain']
         if self.use_detection:
