@@ -2,15 +2,17 @@
 
 ## 1. Introduction
 
-This project is the repository for paper [Model-free Vehicle Tracking and State Estimation in Point Cloud Sequences](https://arxiv.org/abs/2103.06028). It concerns the single object tracking (SOT) of objects in point cloud sequences. The input to the algorithm are the starting location (in the form of a 3D bounding box) of an object and point cloud sequences. Our tracker then provides the bounding box on each subsequent point cloud frame, and get the dense shapes by aggregating the point clouds along with tracking. Furthermore, we explore its usages on other applications, such as simulating LiDAR scans for data augmentation.
+This project is for paper [Model-free Vehicle Tracking and State Estimation in Point Cloud Sequences](https://arxiv.org/abs/2103.06028). It concerns the single object tracking (SOT) of objects in point cloud sequences. 
 
-**Please check our [youtube video](https://www.youtube.com/watch?v=BpHixKs91i8) below for a 1-minute introduction, and [this link](https://www.bilibili.com/video/BV1SX4y1V7nw/) to the bilibili version.**
+The input to the algorithm is the starting location (in the form of a 3D bounding box) of an object and the point cloud sequences for the scene. Our tracker then (1) provides the bounding box on each subsequent point cloud frame, (2) gets the dense shapes by aggregating the point clouds along with tracking.We also explore the usages on other applications, such as simulating LiDAR scans for data augmentation.
+
+**Please check our [youtube video](https://www.youtube.com/watch?v=BpHixKs91i8) below for a 1-minute demonstration, and [this link](https://www.bilibili.com/video/BV1SX4y1V7nw/) to the bilibili version.**
 [![Youtube Video for Our Project](imgs/video_cover.png)](https://www.youtube.com/watch?v=BpHixKs91i8)
 
-This `README` file describes the most basic usages of this code base. For more details, please refer to:
+This `README` file describes the most basic usages of our code base. For more details, please refer to:
 
-* [Data Preprocessing](./docs/data_preprocessing.md): It describes the process for converting the raw data in Waymo dataset into more handy forms.
-* [Benchmark](./docs/benchmark.md): It explains the process of selecting tracklets and construction of our benchmark. Note that the benchmark information is already in the `./benchmark/` and you may directly use it. The code for benchmark construction is for the purpose of verification.
+* [Data Preprocessing](./docs/data_preprocessing.md): It describes how to convert the raw data in Waymo dataset into more handy forms, which can be used by our algorithms.
+* [Benchmark](./docs/benchmark.md): It explains the selection of tracklets and construction of our benchmark. Note that the benchmark information is already in the `./benchmark/` and you may directly use it. The code in this part is for the purpose of verification.
 * [Design](./docs/design.md): This documentation explains our design for the implementation. Reading this would be useful for understanding our tracker implementation and modifying it for your own purpose.
 * [Model Configs](./docs/configs.md): We use the `config.yaml` to specify the behaviour of the tracker. Please refer to this documentation for detailed explanation. 
 * [Toolkit](./docs/toolkit.md): Along this with project, we also provide several code snippets for visualizing the tracking results. This file discusses these toolkits we have created.
@@ -29,7 +31,7 @@ pip install -e ./
 
 ### 2.2 Tracking API
 
-The main API `tracker_api` of is in `main.py`. In the default case, it takes the model configuration, the beginning bounding box, and a data loader as input, output the tracking result as specified below. Some additional guidelines on this API are:
+The main API `tracker_api` is in `main.py`. In the default case, it takes the model configuration, the beginning bounding box, and a data loader as input, output the tracking result as specified below. Some additional guidelines on this API are:
 
 * `data_loader` is an iterator reading the data. On each iteration, it returns a dictionary, with the keys `pc` (point cloud) and `ego` (the transformation matrix to the world coordinate) as compulsory. An example of `data_loader` is in [example_loader](./data_loader/example_loader.py).
 * When you want to compare the tracking results with the ground truth along with tracking, please provide the input argument `gts` and import the function `compare_to_gt`, the data type `sot_3d.data_protos.BBox` . The gts are a list of `BBox`.
