@@ -138,27 +138,32 @@ def make_transformation_matrix(motion):
     return transformation_matrix
 
 
-def iou2d(box_a: BBox, box_b: BBox):
-    boxa_corners = np.array(BBox.box2corners2d(box_a))
+def iou2d(box_a, box_b):
+    boxa_corners = np.array(BBox.box2corners2d(box_a))[:, :2]
     boxb_corners = np.array(BBox.box2corners2d(box_b))[:, :2]
-
     reca, recb = Polygon(boxa_corners), Polygon(boxb_corners)
     overlap = reca.intersection(recb).area
-
     area_a = reca.area
     area_b = recb.area
     iou = overlap / (area_a + area_b - overlap + 1e-10)
-    
     return iou
 
 
-def iou3d(box_a: BBox, box_b: BBox):
-    iou = iou2d(box_a, box_b)
-    height = box_a.h
-    z0, z1 = box_a.z, box_b.z
-    overlap = max(height - np.abs(z0 - z1), 0)
-    iou_3d = iou * overlap / height
-    return iou, iou_3d
+def iou3d(box_a, box_b):
+    boxa_corners = np.array(BBox.box2corners2d(box_a))
+    boxb_corners = np.array(BBox.box2corners2d(box_b))[:, :2]
+    reca, recb = Polygon(boxa_corners), Polygon(boxb_corners)
+    overlap_area = reca.intersection(recb).area
+    iou_2d = overlap_area / (reca.area + recb.area - overlap_area)
+    ha, hb = box_a.h, box_b.h
+    za, zb = box_a.z, box_b.z
+    overlap_height = max(0, min((za + ha / 2) - (zb - hb / 2), (zb + hb / 2) - (za - ha / 2)))
+    overlap_volume = overlap_area * overlap_height
+    union_volume = box_a.w * box_a.l * ha + box_b.w * box_b.l * hb - overlap_volume
+    iou_3d = overlap_volume / union_volume
+
+    union_height = max(za + ha / 2, zb + hb / 2) - min(za - ha / 2, zb - hb / 2)
+    return iou_2d, iou_3d
 
 
 def pc_in_box_range(box, pc, dist=5.0):
