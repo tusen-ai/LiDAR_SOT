@@ -19,9 +19,9 @@ A split of the commands are:
 ```bash
 python time_stamp.py --data_folder tfrecords_directory --output_folder ROOT_DIR                  # the time stamp of each frame
 python ego_info.py --data_folder tfrecords_directory --output_folder ROOT_DIR --process proc_num # the ego information (a 4-by-4 matrix) of each frame
-python raw_pc.py --data_folder tfrecords_directory --out_folder ROOT_DIR --process proc_num      # the point cloud on each frame
+python raw_pc.py --data_folder tfrecords_directory --output_folder ROOT_DIR --process proc_num      # the point cloud on each frame
 python ground_removal.py --data_folder ROOT_DIR --process proc_num                               # remove the ground
-python gt_info.py --data_folder tfrecords_directory --out_folder ROOT_DIR --process proc_num     # extract the gt bboxes information
+python gt_info.py --data_folder tfrecords_directory --output_folder ROOT_DIR --process proc_num     # extract the gt bboxes information
 python terrain_map.py --data_folder ROOT_DIR --process proc_num                                  # overlay the point cloud into a terrain map according to ego information
 ```
 
