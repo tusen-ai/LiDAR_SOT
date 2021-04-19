@@ -38,7 +38,7 @@ parser.add_argument('--output_folder', type=str, default='../../../datasets/waym
 parser.add_argument('--process', type=int, default=1)
 args = parser.parse_args()
 
-args.clean_pc_folder = os.path.join(args.data_folder, 'pc', 'clean_pc')
+args.clean_pc_folder = os.path.join(args.output_folder, 'pc', 'clean_pc')
 args.output_folder = os.path.join(args.output_folder, 'gt_info')
 if not os.path.join(args.output_folder):
     os.makedirs(args.output_folder)
