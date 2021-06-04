@@ -4,7 +4,7 @@
     tracklet_rob: compute the robustness of a tracklet
     dataset_summarize: merge the results of tracklets in the dataset
 """
-import os, argparse, json, numpy as np, matplotlib.pyplot as plt
+import os, argparse, json, numpy as np, matplotlib.pyplot as plt, multiprocessing
 from copy import deepcopy
 import sot_3d
 from sot_3d.data_protos import BBox
@@ -20,6 +20,7 @@ parser.add_argument('--bench_list_folder', type=str, default='../benchmark/vehic
     help='the path of benchmark object list')
 parser.add_argument('--iou', action='store_true', default=False, help='compute iou yet?')
 parser.add_argument('--merge', action='store_true', default=False, help='all the instances at once')
+parser.add_argument('--process', type=int, default=1)
 args = parser.parse_args()
 
 
@@ -155,11 +156,13 @@ def dataset_summarize(metric_list):
     return accs / lengths, robs / lengths
 
 
-def sequence_eval(obj_list, result_folder, name, data_folder, iou):
+def sequence_eval(obj_list, result_folder, name, data_folder, iou, token=0, process=1):
     """ evaluate and return the tracklet-level information in tracklets
     """
     results = list()
-    for tracklet_info in obj_list:
+    for index, tracklet_info in enumerate(obj_list):
+        if index % process != token:
+            continue
         tracklet_results = json.load(open(
             os.path.join(result_folder, name, 'summary', '{:}.json'.format(tracklet_info['id']))))
         
@@ -191,16 +194,36 @@ def sequence_eval(obj_list, result_folder, name, data_folder, iou):
 def main(bench_list_folder, result_folder, name, data_folder, iou):
     if args.merge:
         obj_list = json.load(open(os.path.join(bench_list_folder, 'bench_list.json'), 'r'))
-        results = sequence_eval(obj_list, result_folder, name, data_folder, iou)
-        acc, rob = dataset_summarize(results)
+        pool = multiprocessing.Pool(args.process)
+        results = pool.starmap(sequence_eval, [
+            (obj_list, result_folder, name, data_folder, iou, token, args.process)
+            for token in range(args.process)  
+        ])
+        pool.close()
+        pool.join()
+        final_results = list()
+        for i in range(len(results)):
+            for j in range(len(results[i])):
+                final_results.append(results[i][j])
+        acc, rob = dataset_summarize(final_results)
         print('All set\t -- Acc Rob: {:} {:}'.format(acc, rob))
         return
 
     hardness_levels = ['easy', 'medium', 'hard']
     for hardness_level in hardness_levels:
         obj_list = json.load(open(os.path.join(bench_list_folder, '{:}.json'.format(hardness_level)), 'r'))
-        results = sequence_eval(obj_list, result_folder, name, data_folder, iou)
-        acc, rob = dataset_summarize(results)
+        pool = multiprocessing.Pool(args.process)
+        results = pool.starmap(sequence_eval, [
+            (obj_list, result_folder, name, data_folder, iou, token, args.process)
+            for token in range(args.process)  
+        ])
+        pool.close()
+        pool.join()
+        final_results = list()
+        for i in range(len(results)):
+            for j in range(len(results[i])):
+                final_results.append(results[i][j])
+        acc, rob = dataset_summarize(final_results)
         print('{:} set\t -- Acc Rob: {:} {:}'.format(hardness_level, acc, rob))
     return
 
