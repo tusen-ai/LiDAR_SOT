@@ -55,7 +55,7 @@ def find_gt_bboxes(id, data_folder, segment_name, start_frame, end_frame):
     index = ids.index(id)
 
     gts = list()
-    for i in range(start_frame + 1, end_frame + 1):
+    for i in range(start_frame, end_frame + 1):
         # first frame needs no evaluation
         # so begin from start_frame + 1
         frame_bboxes = gt_info['bboxes'][i]
