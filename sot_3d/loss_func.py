@@ -142,7 +142,7 @@ class LossFunc:
                 icp_der[4 * i: 4 * (i + 1)] += \
                     self.icp_factors[i].jac(params[4 * i: 4 * (i + 1)])
             icp_der /= (self.size - 1)
-            result += icp_der
+            result += icp_der * self.icp_weight
 
         # motion prior
         motion_prior_der = self.motion_prior.jac(params[:])

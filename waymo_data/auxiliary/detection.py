@@ -11,8 +11,10 @@ from waymo_open_dataset.protos import metrics_pb2
 parser = argparse.ArgumentParser()
 parser.add_argument('--name', type=str, default='public')
 parser.add_argument('--det_folder', type=str, default='../../../datasets/waymo/sot/detection/')
-parser.add_argument('--file_name', type=str, default='val.bin')
+parser.add_argument('--file_name', type=str, default='gt.bin')
 parser.add_argument('--data_folder', type=str, default='../../../datasets/waymo/sot/')
+parser.add_argument('--metadata', action='store_true', default=False)
+parser.add_argument('--id', action='store_true', default=False)
 args = parser.parse_args()
 
 args.output_folder = os.path.join(args.det_folder, args.name, 'dets')
@@ -72,10 +74,13 @@ def main(name, data_folder, det_folder, file_name, out_folder):
     objects = objects.objects
     object_num = len(objects)
 
-    result_bbox, result_type = dict(), dict()
+    result_bbox, result_type, result_velo, result_accel, result_ids = dict(), dict(), dict(), dict(), dict()
     for seg_name in ts_info.keys():
         result_bbox[seg_name] = dict()
         result_type[seg_name] = dict()
+        result_velo[seg_name] = dict()
+        result_accel[seg_name] = dict()
+        result_ids[seg_name] = dict()
     
     for _i in range(object_num):
         instance = objects[_i]
@@ -95,6 +100,14 @@ def main(name, data_folder, det_folder, file_name, out_folder):
         }
         bbox_array = bbox_dict2array(bbox_dict)
         obj_type = instance.object.type
+        
+        if args.metadata:
+            meta_data = instance.object.metadata
+            velo = (meta_data.speed_x, meta_data.speed_y)
+            accel = (meta_data.accel_x, meta_data.accel_y)
+
+        if args.id:
+            id = instance.object.id
 
         val_index = None
         for _j in range(len(segment_name_list)):
@@ -112,32 +125,64 @@ def main(name, data_folder, det_folder, file_name, out_folder):
         if str(frame_number) not in result_bbox[segment_name].keys():
             result_bbox[segment_name][str(frame_number)] = list()
             result_type[segment_name][str(frame_number)] = list()
+            if args.metadata:
+                result_velo[segment_name][str(frame_number)] = list()
+                result_accel[segment_name][str(frame_number)] = list()
+            if args.id:
+                result_ids[segment_name][str(frame_number)] = list()
+
         result_bbox[segment_name][str(frame_number)].append(bbox_array)
         result_type[segment_name][str(frame_number)].append(obj_type)
+        if args.metadata:
+            result_velo[segment_name][str(frame_number)].append(velo)
+            result_accel[segment_name][str(frame_number)].append(accel)
+        if args.id:
+            result_ids[segment_name][str(frame_number)].append(id)
 
-        if (_i + 1) % 10000 == 0:
+        if (_i + 1) % 100000 == 0:
             print(_i + 1, ' / ', object_num)
     
     # store in files
     for _i, segment_name in enumerate(segment_name_list):
         dets = result_bbox[segment_name]
         types = result_type[segment_name]
+        if args.metadata:
+            velos = result_velo[segment_name]
+            accels = result_accel[segment_name]
+        if args.id:
+            ids = result_ids[segment_name]
         print('{} / {}'.format(_i + 1, len(segment_name_list)))
 
         frame_keys = sorted(str_list_to_int(dets.keys()))
         max_frame = max(frame_keys)
         bboxes = list()
         obj_types = list()
+        velocities, accelerations, id_names = list(), list(), list()
         for key in range(max_frame + 1):
             if str(key) in dets.keys():
                 bboxes.append(dets[str(key)])
                 obj_types.append(types[str(key)])
+                if args.metadata:
+                    velocities.append(velos[str(key)])
+                    accelerations.append(accels[str(key)])
+                if args.id:
+                    id_names.append(ids[str(key)])
             else:
                 bboxes.append([])
                 obj_types.append([])
+                if args.metadata:
+                    velocities.append([])
+                    accelerations.append([])
+                if args.id:
+                    id_names.append([])
+        result = {'bboxes': bboxes, 'types': obj_types}
+        if args.metadata:
+            result['velos'] = velocities
+            result['accels'] = accelerations
+        if args.id:
+            result['ids'] = id_names
 
-        np.savez_compressed(os.path.join(out_folder, "{:}.npz".format(segment_name)), 
-            bboxes=bboxes, types=obj_types)
+        np.savez_compressed(os.path.join(out_folder, "{:}.npz".format(segment_name)), **result)
 
 
 if __name__ == '__main__':
