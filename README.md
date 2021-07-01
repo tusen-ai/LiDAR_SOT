@@ -184,10 +184,10 @@ matplotlib, open3d, pangolin
 If you find our paper or repository useful, please consider citing
 
 ```tex
-@article{pang2021model,
+@article{pang_lidarsot,
     title={Model-free Vehicle Tracking and State Estimation in Point Cloud Sequences},
     author={Pang, Ziqi and Li, Zhichao and Wang, Naiyan},
-    journal={arXiv preprint arXiv:2103.06028},
+    journal={IROS},
     year={2021}
 }
 ```
