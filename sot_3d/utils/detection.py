@@ -2,7 +2,7 @@
 """
 import numpy as np, math
 from copy import deepcopy
-from sot_3d.data_protos import BBox
+from ..data_protos import BBox
 
 
 __all__ = [

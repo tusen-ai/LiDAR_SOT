@@ -1,8 +1,8 @@
 """ An example moving average motion model
 """
 import numpy as np, math, copy
-import sot_3d.utils as utils
-from sot_3d.data_protos import BBox
+from .. import utils
+from ..data_protos import BBox
 
 
 class MotionModel:

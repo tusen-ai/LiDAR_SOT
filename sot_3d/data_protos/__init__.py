@@ -1,1 +1,1 @@
-from sot_3d.data_protos.bbox import BBox
+from ..data_protos.bbox import BBox

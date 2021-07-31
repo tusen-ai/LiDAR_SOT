@@ -1,10 +1,11 @@
 """ Maintaining a shape for the tracked vehicles
 """
-import os, numpy as np, matplotlib.pyplot as plt, sot_3d.utils as utils, sot_3d
+import os, numpy as np, matplotlib.pyplot as plt
 from copy import deepcopy
-from sot_3d.shape_map.obj_shape import ObjShape
-from sot_3d.shape_map.subshape import SubShape
-from sot_3d.data_protos import BBox
+from ..shape_map.obj_shape import ObjShape
+from ..shape_map.subshape import SubShape
+from ..data_protos import BBox
+from .. import utils, FrameData
 
 
 class ShapeMap:
@@ -33,7 +34,7 @@ class ShapeMap:
             return
         self.obj_shape.add_pc(pc=pc, bbox=bbox)
     
-    def pre_frame_optim(self, input_data: sot_3d.FrameData):
+    def pre_frame_optim(self, input_data: FrameData):
         # this initialization only works on frame 0
         self.initialize_shapes(pc=input_data.pc, bbox=input_data.start_bbox)
         self.shape_pc = self.obj_shape.shape_pc

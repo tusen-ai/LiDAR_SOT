@@ -1,6 +1,5 @@
 import numpy as np, math
-import sot_3d.utils as utils
-import sot_3d
+from .. import utils, OptimData, FrameData
 
 
 class MotionPriorFactor:
@@ -10,10 +9,10 @@ class MotionPriorFactor:
         self.reference_motions = None
         return
     
-    def pre_frame_optim(self, input_data: sot_3d.FrameData):
+    def pre_frame_optim(self, input_data: FrameData):
         return
     
-    def pre_optim_step(self, optim_data: sot_3d.OptimData, frame_indexes):
+    def pre_optim_step(self, optim_data: OptimData, frame_indexes):
         frame_start, frame_end = frame_indexes
         self.reference_motions = np.zeros(4 * (frame_end - frame_start))
         for _i in range(frame_start + 1, frame_end + 1):

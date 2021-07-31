@@ -1,10 +1,10 @@
 """ Point-to-Point Loss between LiDAR scans
 """
-import numpy as np, numba, sot_3d
+import numpy as np, numba
 from copy import deepcopy
-import sot_3d.utils as utils
+from .. import utils, FrameData, OptimData
 from sklearn.neighbors import NearestNeighbors
-from sot_3d.data_protos import BBox
+from ..data_protos import BBox
 
 
 class ICPLoss:
@@ -23,13 +23,13 @@ class ICPLoss:
         self.box_scaling_next = self.configs['box_scaling_next']
         self.agg_subshape = self.configs['agg_subshape']
     
-    def pre_frame_optim(self, input_data: sot_3d.FrameData):
+    def pre_frame_optim(self, input_data: FrameData):
         return
     
-    def pre_optim_step(self, optim_data: sot_3d.OptimData, frame_indexes):
+    def pre_optim_step(self, optim_data: OptimData, frame_indexes):
         """ prepare the loss computation for icp loss
         Args:
-            optim_data (sot_3d.OptimData): data for optimization
+            optim_data (OptimData): data for optimization
             frame_indexes ((frame0, frame1)): which two frames to compute
         """
         self.pc_a = optim_data.pcs[frame_indexes[0]]

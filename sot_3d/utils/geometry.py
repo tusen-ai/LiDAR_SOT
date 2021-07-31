@@ -2,7 +2,7 @@ import numpy as np
 from copy import deepcopy
 from shapely.geometry import Polygon
 import numba
-from sot_3d.data_protos import BBox
+from ..data_protos import BBox
 
 
 __all__ = ['pc_in_box', 'downsample', 'pc_in_box_2D',

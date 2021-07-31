@@ -2,7 +2,8 @@
     Its intuition is to put the objects on the ground.
     The formula is to compute the L2 distance between current frame latitude with a reference latitude (frame 0 latitude by default).
 """
-import numpy as np, sot_3d.utils as utils, sot_3d, math
+import numpy as np, math
+from .. import utils,FrameData, OptimData
 
 
 class LatitudeLoss:
@@ -14,7 +15,7 @@ class LatitudeLoss:
         self.cur_ground_latitude = None           # ground latitude in the current frame
         return
     
-    def pre_frame_optim(self, input_data: sot_3d.FrameData):
+    def pre_frame_optim(self, input_data: FrameData):
         """ set the reference latitude on frame 0
         """
         if self.ref_latitude_set:
@@ -30,7 +31,7 @@ class LatitudeLoss:
             self.ref_latitude = bbox.z - latitude
         return
     
-    def pre_optim_step(self, optim_data: sot_3d.OptimData, frame_indexes):
+    def pre_optim_step(self, optim_data: OptimData, frame_indexes):
         """ set the newest previous latitude, so that we can compute the loss w.r.t motion
         """
         self.prev_latitude = optim_data.bboxes[frame_indexes[0]].z

@@ -5,9 +5,9 @@
     3. You may add your own field of data into frame data
 """
 import numpy as np
-import sot_3d.utils as utils
-from sot_3d.data_protos import BBox
-from sot_3d.visualization import Visualizer2D
+from . import utils
+from .data_protos import BBox
+from .visualization import Visualizer2D
 
 
 class FrameData:

@@ -1,8 +1,10 @@
 """ Detection Factor.
     Involve the detection factors in the optimization process.
 """
-import numpy as np, sot_3d.utils as utils, numba, sot_3d
-from sot_3d.data_protos import BBox
+import numpy as np, numba
+from ..data_protos import BBox
+from .. import utils
+from .. import FrameData, OptimData
 
 
 class DetectionFactor:
@@ -13,14 +15,14 @@ class DetectionFactor:
         self.bbox_size = None     # size of bbox
         self.tgt_det = None       # target detection bbox
 
-    def pre_frame_optim(self, input_data: sot_3d.FrameData):
+    def pre_frame_optim(self, input_data: FrameData):
         # on the first frame, get the target size
         start_bbox = input_data.start_bbox
         if start_bbox is not None:
             self.bbox_size = np.array([start_bbox.l, start_bbox.w, start_bbox.h])
         return
     
-    def pre_optim_step(self, optim_data: sot_3d.OptimData, frame_indexes):
+    def pre_optim_step(self, optim_data: OptimData, frame_indexes):
         """ Preprare the loss computation for detection factor.
             Select the detection bbox.
         """

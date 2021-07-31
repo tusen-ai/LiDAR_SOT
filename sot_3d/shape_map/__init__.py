@@ -1,1 +1,1 @@
-from sot_3d.shape_map.shape_map import ShapeMap
+from ..shape_map.shape_map import ShapeMap

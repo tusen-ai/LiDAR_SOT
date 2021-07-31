@@ -1,7 +1,7 @@
 """ Get the heigh of ground from a terrain map
 """
 import numpy as np
-from sot_3d.utils.geometry import pc_in_box_2D
+from ..utils.geometry import pc_in_box_2D
 
 
 __all__ = ['get_latitude']

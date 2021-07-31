@@ -3,9 +3,8 @@
 import os, numpy as np
 from scipy.optimize import minimize
 import matplotlib.pyplot as plt 
-import sot_3d
-from sot_3d.data_protos import BBox
-from sot_3d import OptimData
+from . import OptimData, FrameData, DataBuffer, LossFunc, MotionModel, ShapeMap, finder
+from .data_protos import BBox
 
 
 class Tracker:
@@ -26,10 +25,10 @@ class Tracker:
         self.sliding_window_size = configs['running']['window_size']
 
         # components
-        self.data_buffer = sot_3d.DataBuffer(configs)
-        self.loss_func = sot_3d.LossFunc(configs)
-        self.motion_model = sot_3d.MotionModel(configs)
-        self.shape_map = sot_3d.ShapeMap(configs)
+        self.data_buffer = DataBuffer(configs)
+        self.loss_func = LossFunc(configs)
+        self.motion_model = MotionModel(configs)
+        self.shape_map = ShapeMap(configs)
 
         # results
         self.result_log = dict()
@@ -40,10 +39,10 @@ class Tracker:
 
         self.input_data = None           # for debug
     
-    def track(self, input_data: sot_3d.FrameData):
+    def track(self, input_data: FrameData):
         """ Perform a frame of tracking
         Args:
-            input_data (sot_3d.FrameData): input data
+            input_data (FrameData): input data
 
         Returns:
             frame_result: a dict, refer to get_frame_result.
@@ -84,7 +83,7 @@ class Tracker:
             ITER_NUM += 1
         return
     
-    def pre_frame_optim(self, input_data: sot_3d.FrameData):
+    def pre_frame_optim(self, input_data: FrameData):
         """ The frame-level preparation for loss functions.
             These operations are out-of-the-loop of iterative optimization.
             Including:
@@ -92,7 +91,7 @@ class Tracker:
                 * shape map initialization
                 etc...
         Args:
-            input_data (sot_3d.FrameData): input data
+            input_data (FrameData): input data
         """
         if self.cur_frame == 0:
             self.tmp_init_box0 = input_data.start_bbox
@@ -104,7 +103,7 @@ class Tracker:
 
         elif self.cur_frame == 1:
             self.tmp_init_pc1 = input_data.pc
-            finder = sot_3d.finder.Finder(self.configs['finder'], self.tmp_init_box0, self.tmp_init_pc0, self.tmp_init_pc1)
+            finder = finder.Finder(self.configs['finder'], self.tmp_init_box0, self.tmp_init_pc0, self.tmp_init_pc1)
             pred_motion = finder.icp()
             del self.tmp_init_pc0, self.tmp_init_pc1
         else:

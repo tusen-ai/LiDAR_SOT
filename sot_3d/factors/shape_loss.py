@@ -1,11 +1,10 @@
 import numpy as np
 from copy import deepcopy
-import sot_3d
-import sot_3d.utils as utils
+from .. import utils, FrameData, OptimData
 from sklearn.neighbors import NearestNeighbors
 import matplotlib.pyplot as plt
-from sot_3d.data_protos import BBox
-from sot_3d.visualization import Visualizer2D
+from ..data_protos import BBox
+from ..visualization import Visualizer2D
 
 
 class ShapeLoss:
@@ -32,10 +31,10 @@ class ShapeLoss:
             self.ransac_limit = self.ransac['ransac_limit']
         return
     
-    def pre_frame_optim(self, input_data: sot_3d.FrameData):
+    def pre_frame_optim(self, input_data: FrameData):
         return
     
-    def pre_optim_step(self, optim_data: sot_3d.OptimData, frame_indexes):
+    def pre_optim_step(self, optim_data: OptimData, frame_indexes):
         prev_bbox = optim_data.bboxes[frame_indexes[0]] 
         pred_bbox = optim_data.bboxes[frame_indexes[1]]
         self.shape_state = BBox.bbox2array(prev_bbox)[:4]
