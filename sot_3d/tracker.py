@@ -3,8 +3,13 @@
 import os, numpy as np
 from scipy.optimize import minimize
 import matplotlib.pyplot as plt 
-from . import OptimData, FrameData, DataBuffer, LossFunc, MotionModel, ShapeMap, finder
+from . import FrameData, OptimData
+from .loss_func import LossFunc
+from .motion_model import MotionModel
+from .shape_map import ShapeMap
 from .data_protos import BBox
+from .data_buffer import DataBuffer
+from .finder import Finder
 
 
 class Tracker:
@@ -103,7 +108,7 @@ class Tracker:
 
         elif self.cur_frame == 1:
             self.tmp_init_pc1 = input_data.pc
-            finder = finder.Finder(self.configs['finder'], self.tmp_init_box0, self.tmp_init_pc0, self.tmp_init_pc1)
+            finder = Finder(self.configs['finder'], self.tmp_init_box0, self.tmp_init_pc0, self.tmp_init_pc1)
             pred_motion = finder.icp()
             del self.tmp_init_pc0, self.tmp_init_pc1
         else:
