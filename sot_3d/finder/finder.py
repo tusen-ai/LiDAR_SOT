@@ -3,9 +3,7 @@
 """
 import numpy as np
 from scipy.optimize import minimize, root
-import sot_3d.utils as utils
-import sot_3d.factors as factors
-from sot_3d import OptimData
+from .. import utils, factors, OptimData
 
 
 class Finder:

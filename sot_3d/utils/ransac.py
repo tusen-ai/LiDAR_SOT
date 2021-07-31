@@ -2,7 +2,7 @@
     The main function is the ransac
 """
 import numpy as np, random
-from sot_3d.utils.geometry import make_transformation_matrix
+from ..utils.geometry import make_transformation_matrix
 
 
 def ransac(src, tgt, min_point_num, num_iter, threshold, reference_motion, confidence=0.99):

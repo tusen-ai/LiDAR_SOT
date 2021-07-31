@@ -1,7 +1,7 @@
 """ This term regularize the consistency of motions
 """
 import numpy as np
-import sot_3d
+from .. import FrameData, OptimData
 
 
 class MotionConsistency:
@@ -9,10 +9,10 @@ class MotionConsistency:
         self.configs = configs
         self.prev_heading = None
     
-    def pre_frame_optim(self, input_data: sot_3d.FrameData):
+    def pre_frame_optim(self, input_data: FrameData):
         return
     
-    def pre_optim_step(self, optim_data: sot_3d.OptimData, frame_indexes):
+    def pre_optim_step(self, optim_data: OptimData, frame_indexes):
         self.prev_heading = optim_data.bboxes[frame_indexes[0]].o
         return
     

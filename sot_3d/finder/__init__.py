@@ -1,1 +1,1 @@
-from sot_3d.finder.finder import Finder
+from ..finder.finder import Finder

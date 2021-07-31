@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt, numpy as np
-from mot_3d.data_protos import BBox
+from ..data_protos import BBox
 
 
 class Visualizer2D:

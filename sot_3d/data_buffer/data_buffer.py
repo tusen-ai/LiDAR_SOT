@@ -3,9 +3,10 @@
     2. ego information (ego buffer)
     3. detection bboxes (det buffer, element is None on no detection cases)
 """
-import os, numpy as np, sot_3d.utils as utils, sot_3d
-from sot_3d.data_protos import BBox
-from sot_3d.frame_data import FrameData
+import os, numpy as np
+from ..data_protos import BBox
+from ..frame_data import FrameData
+from .. import utils
 
 
 class DataBuffer:

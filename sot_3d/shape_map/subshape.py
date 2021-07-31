@@ -1,6 +1,6 @@
 import numpy as np
-import sot_3d.utils as utils
-from sot_3d.data_protos import BBox
+from .. import utils
+from ..data_protos import BBox
 
 
 class SubShape:

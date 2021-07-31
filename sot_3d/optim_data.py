@@ -5,7 +5,7 @@
     2. Each item in the list corresponds to a frame
 """
 import numpy as np
-import sot_3d.utils as utils
+from . import utils
 
 
 class OptimData:
